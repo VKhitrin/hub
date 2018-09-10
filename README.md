@@ -58,6 +58,8 @@ Will showcase relevant dynamic information.
 
 * `assets/css/style.css` - CSS customization.
 
+* `assets/fonts/` - Local fonts directory.
+
 ## Compatability
 
 (Need to test on more platforms)
