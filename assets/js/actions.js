@@ -33,7 +33,11 @@ window.onload = function () {
         case 46: return 'delete';
         case 78: return ctrl ? 'c-n' : 'n';
         case 80: return ctrl ? 'c-p' : 'n';
-        case 91: return 'super';
+        case 91: return 'super'; // Left Windows Key - Windows
+        case 92: return 'super'; // Right Windows Key - Windows
+        case 125: return 'super'; // Left Super Key - Linux
+        case 126: return 'super'; // Right Super Key - Linux
+        case 224: return 'super'; // Command Key - MacOS
       }
     },
   };
@@ -161,8 +165,6 @@ window.onload = function () {
     class Hub {
     constructor(options) {
       this._el = $.el('#hub');
-      this._commands = options.commands;
-      this._newTab = options.newTab;
       this._toggled = false;
       this._buildHub();
       this._bindMethods();
@@ -472,7 +474,8 @@ window.onload = function () {
       const res = { query: query, split: null };
       if (query.match(this._urlRegex)) {
         const hasProtocol = query.match(this._protocolRegex);
-        res.redirect = hasProtocol ? query : 'http://' + query;
+        res.action = "Navigating";
+        res.redirect = hasProtocol ? query : 'https://' + query;
       } else {
         const splitSearch = query.split(this._searchDelimiter);
         const splitPath = query.split(this._pathDelimiter);
@@ -486,21 +489,26 @@ window.onload = function () {
               res.split = this._searchDelimiter;
               res.query = this._shiftAndTrim(splitSearch, res.split);
               res.redirect = this._prepSearch(url, searchPath, res.query);
+              res.action = "Searching";
             } else if (res.isPath) {
               res.split = this._pathDelimiter;
               res.path = this._shiftAndTrim(splitPath, res.split);
               res.redirect = this._prepPath(url, res.path);
+              res.action = "Navigating";
             } else {
               res.redirect = url;
+              res.action = "Browsing";
             }
             return true;
           }
           if (key === '*') {
             res.redirect = this._prepSearch(url, searchPath, query);
+            res.action = "Searching";
           }
         });
       }
       res.color = this._getColorFromUrl(res.redirect);
+      res.context = this._getContextFromUrl(res.redirect, res.action);
       return res;
     }
 
@@ -510,6 +518,15 @@ window.onload = function () {
         .filter(c => this._getHostname(c[3]) === domain)
         .map(c => c[5])[0];
       return color || null;
+    }
+
+    _getContextFromUrl(url, action) {
+      const domain = this._getHostname(url);
+      var context = this._commands
+        .filter(c => this._getHostname(c[3]) === domain)
+        .map(c => c[1])[0];
+      if (!context) context = url;
+      return action + " " + context || null;
     }
 
     _getHostname(url) {
@@ -546,7 +563,9 @@ window.onload = function () {
     constructor(options) {
       this._formEl = $.el('#search-form');
       this._inputEl = $.el('#search-input');
+      this._contextEl = $.el('#search-context');
       this._colors = options.colors;
+      this._commands = options.commands;
       this._help = options.help;
       this._hub = options.hub;
       this._suggester = options.suggester;
@@ -606,6 +625,8 @@ window.onload = function () {
       const { isKey } = this._queryParser.parse(newQuery);
       this._inputElVal = newQuery;
       this._setBackgroundFromQuery(newQuery);
+      this._setContextFromQuery(newQuery);
+      this._set
       if (!newQuery || isHelp ) this.hide();
       if (isHelp){
         this._hub.toggle(false);
@@ -652,6 +673,12 @@ window.onload = function () {
       this._formEl.style.backgroundColor = color;
     }
 
+    _setContextFromQuery(query) {
+      if (!this._commands) return;
+      const { context } = this._queryParser.parse(query);
+      this._contextEl.innerHTML = context;
+    }
+
     _submitForm(e) {
       if (e) e.preventDefault();
       const query = this._inputEl.value;
@@ -674,10 +701,7 @@ window.onload = function () {
   };
 
   const getHub = () => {
-    return new Hub({
-      commands: CONFIG.commands,
-      newTab: CONFIG.newTab,
-    });
+    return new Hub();
   };
 
   const getInfluencers = () => {
@@ -713,6 +737,7 @@ window.onload = function () {
   const getForm = () => {
     return new Form({
       colors: CONFIG.colors,
+      commands: CONFIG.commands,
       help: getHelp(),
       hub: getHub(),
       instantRedirect: CONFIG.instantRedirect,
@@ -728,5 +753,4 @@ window.onload = function () {
   });
 
   new CurrentDate();
-
 }

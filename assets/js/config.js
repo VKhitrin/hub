@@ -5,10 +5,11 @@ const CONFIG = {
   commands: [
     [null, 'Google', '*', 'https://encrypted.google.com', '/search?q={}', '#111'],
     ['Work', 'GitHub', 'g', 'https://github.com', '/search?q={}', '#333'],
-    ['Work', 'Stackoverflow', 's', 'https://stackoverflow.com', '/search?q={}', '#8d9299'],
+    ['Work', 'Stackoverflow', 's', 'https://stackoverflow.com', '/search?q={}', '#f48024'],
     ['Look', 'Codrops', 'C', 'https://tympanus.net/codrops', '?search-type=posts&s={}', '#0099cc'],
     ['Look', 'Hunt', 'H', 'https://www.producthunt.com', '/search?q={}', '#da552f'],
     ['Look', 'Unsplash', 'u', 'https://unsplash.com/', '/search/{}', '#000'],
+    ['Look', 'Imgur', 'i', 'https://imgur.com', '/search?q={}', '#85bf25'],
     ['Lurk', 'Reddit', 'r', 'https://www.reddit.com', '/search?q={}', '#5f99cf'],
     ['Lurk', 'Twitter', 't', 'https://twitter.com', '/search?q={}', '#1da1f2'],
     ['Watch', 'Twitch', 'T', 'https://www.twitch.tv', null, '#6441a5'],

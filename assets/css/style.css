@@ -1,11 +1,9 @@
-
 @font-face {
   font-family: 'Lato';
   font-style: normal;
   font-weight: 400;
   src: local('Lato Regular'), local('Lato-Regular'), url(../fonts/LatoLatin-Regular.woff2) format('woff2');
 }
-
 
 :root{
   --background: #000;
@@ -25,6 +23,7 @@ body {
   font-family: Lato, sans-serif;
   color: var(--search);
 }
+
 input,
 button,
 input:focus,
@@ -42,17 +41,20 @@ button:focus {
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+
 ul,
 li {
   margin: 0;
   padding: 0;
   list-style: none;
 }
+
 a,
 a:focus {
   color: inherit;
   outline: 0;
 }
+
 #clock {
   display: block;
   margin-top: -.06em;
@@ -61,6 +63,7 @@ a:focus {
   cursor: pointer;
   color: var(--foreground);
 }
+
 #date {
   display: block;
   font-size: 1.5rem;
@@ -68,6 +71,19 @@ a:focus {
   cursor: pointer;
   color: var(--foreground);
 }
+
+#search-context{
+  min-height: 1.5em;
+  text-align: center;
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: 900;
+  letter-spacing: .05em;
+  color: var(--foreground);
+}
+
 #search-form {
   padding: 1em;
   background: var(--search);
@@ -75,9 +91,11 @@ a:focus {
   box-sizing: border-box;
   z-index: 2;
 }
+
 #search-form>div {
   width: 100%;
 }
+
 #search-input,
 #search-input:focus {
   width: 100%;
@@ -86,28 +104,34 @@ a:focus {
   font-weight: 900;
   letter-spacing: .05em;
 }
+
 #search-suggestions {
-  display: none;
+  min-height: 3em;
   flex-wrap: wrap;
   justify-content: center;
 }
+
 body.suggestions #search-suggestions {
   display: flex;
 }
+
 .search-suggestion {
   padding: .7em 1em;
   white-space: nowrap;
   font-size: 1.1em;
   cursor: pointer;
 }
+
 .search-suggestion.highlight {
   background-color: var(--foreground);
   color: #222;
 }
+
 .search-suggestion b {
   position: relative;
   font-weight: 400;
 }
+
 .search-suggestion b::after {
   content: ' ';
   position: absolute;
@@ -118,9 +142,11 @@ body.suggestions #search-suggestions {
   background-color: var(--foreground);
   opacity: .8;
 }
+
 .search-suggestion.highlight b::after {
   opacity: 0;
 }
+
 #help, #hub{
   display: block;
   padding: 8vw;
@@ -128,12 +154,15 @@ body.suggestions #search-suggestions {
   font-size: 1.3rem;
   z-index: 1;
 }
+
 .category {
   margin-bottom: 2rem;
 }
+
 .category:last-of-type {
   margin-bottom: 0;
 }
+
 .category-name {
   margin: 0 0 2rem;
   font-size: .7em;
@@ -141,6 +170,7 @@ body.suggestions #search-suggestions {
   text-transform: uppercase;
   color: var(--foreground);
 }
+
 .command a {
   display: block;
   position: relative;
@@ -150,9 +180,11 @@ body.suggestions #search-suggestions {
   text-decoration: none;
   color: var(--foreground);
 }
+
 .command:last-of-type a {
   margin-bottom: 0;
 }
+
 .command-key {
   display: block;
   float: left;
@@ -164,10 +196,12 @@ body.suggestions #search-suggestions {
   font-size: .8em;
   text-align: center;
 }
+
 .command-name {
   position: relative;
   overflow: hidden;
 }
+
 .command-name::after {
   content: ' ';
   position: absolute;
@@ -180,11 +214,13 @@ body.suggestions #search-suggestions {
   background-color: var(--foreground);
   opacity: 0;
 }
+
 .command a:hover .command-name::after,
 .command a:focus .command-name::after {
   transform: translateX(0);
   opacity: 1;
 }
+
 .overlay {
   position: fixed;
   top: 0;
@@ -195,11 +231,13 @@ body.suggestions #search-suggestions {
   height: 100%;
   visibility: hidden;
 }
+
 body.help #help.overlay,
 body.hub #hub.overlay,
 body.form #search-form.overlay {
   visibility: visible;
 }
+
 .center {
   display: flex;
   flex-direction: column;
@@ -208,8 +246,9 @@ body.form #search-form.overlay {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  background: #000;
+  background: var(--background);
 }
+
 .footnote {
   position: absolute;
   bottom: 0;
@@ -222,11 +261,13 @@ body.form #search-form.overlay {
   float: right;
   margin-right: 20px;
 }
+
 #hub-message{
   color: var(--foreground);
   float: left;
   margin-left: 20px;
 }
+
 @media (min-width: 500px) {
   .categories {
     display: grid;
@@ -253,6 +294,7 @@ body.form #search-form.overlay {
     grid-template-columns: repeat(2, 300px) 185px;
   }
 }
+
 @media (min-width: 1700px) {
   .categories {
     grid-template-columns: repeat(5, 250px) 185px;
