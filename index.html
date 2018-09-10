@@ -1,0 +1,44 @@
+<!doctype html>
+
+<head>
+  <title>hub</title>
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/internal.js"></script>
+  <script src="./assets/js/actions.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#000">
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
+</head>
+
+<body>
+  <div class="center">
+    <time id="clock"></time>
+    <time id="date"></time>
+  </div>
+
+  <form class="overlay center" id="search-form" autocomplete="off" spellcheck="false">
+    <div>
+      <input id="search-input" type="text">
+      <ul id="search-suggestions"></ul>
+    </div>
+  </form>
+
+  <aside class="overlay center" id="help"></aside>
+  <aside class="overlay center" id="hub"></aside>
+
+  <div class="footnote">
+    <span id="help-message">
+      <p>
+        Press '?' for help
+      </p>
+    </span>
+    <span id="hub-message">
+      <p>
+        Press '~' to access the hub
+      </p>
+    </span>
+  </div>
+</body>
