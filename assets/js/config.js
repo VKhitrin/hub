@@ -19,6 +19,9 @@ const CONFIG = {
   // give suggestions as you type
   suggestions: true,
 
+  // allow browser to save history to localStorage
+  saveToLocalStorage: true,
+
   // max amount of suggestions that will ever be displayed
   suggestionsLimit: 10,
 
@@ -60,6 +63,6 @@ const CONFIG = {
   clockDelimiter: '&nbsp;',
 
   // note: you can pass in your search query via the q query param
-  // e.g. going to file:///path/to/tilde/index.html?q=hamsters is equivalent
-  // to typing "hamsters" and pressing enter
+  // e.g. going to file:///path/to/hub/index.html?q=cats is equivalent
+  // to typing "cats" and pressing enter
 };

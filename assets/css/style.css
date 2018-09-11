@@ -42,8 +42,9 @@ button:focus {
   -moz-appearance: none;
 }
 
-ul,
-li {
+.categories,
+.category,
+.category ul {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -147,12 +148,19 @@ body.suggestions #search-suggestions {
   opacity: 0;
 }
 
-#help, #hub{
-  display: block;
+#help, #commands-help, #hub{
+  display: flex;
   padding: 8vw;
   background: var(--background);
   font-size: 1.3rem;
-  z-index: 1;
+}
+
+#commands-help, #hub{
+z-index: 1;
+}
+
+#help {
+  z-index: 2;
 }
 
 .category {
@@ -233,6 +241,7 @@ body.suggestions #search-suggestions {
 }
 
 body.help #help.overlay,
+body.commands-help #commands-help.overlay,
 body.hub #hub.overlay,
 body.form #search-form.overlay {
   visibility: visible;
@@ -253,19 +262,50 @@ body.form #search-form.overlay {
   position: absolute;
   bottom: 0;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 33vw)100vw;
 }
 
-#help-message{
+#help-message {
   color: var(--foreground);
-  float: right;
-  margin-right: 20px;
+  text-align: center; 
 }
 
-#hub-message{
+#commands-help-message {
   color: var(--foreground);
-  float: left;
+  text-align: right;
+}
+
+#hub-message {
+  color: var(--foreground);
   margin-left: 20px;
+  text-align: left;
+}
+
+span p span{
+  padding: .7em 1em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+span.highlight p span {
+  background-color: var(--foreground);
+  color: #222;
+}
+
+.help-content-box {
+  color: var(--foreground); 
+}
+
+.hub-version a {
+  text-decoration: none;
+  font-size: 0.7em;
+}
+
+.help-title a:hover, .hub-version a:hover {
+  background-color: var(--foreground);
+  color: var(--background);;
 }
 
 @media (min-width: 500px) {

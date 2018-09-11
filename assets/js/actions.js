@@ -35,6 +35,7 @@ window.onload = function () {
         case 80: return ctrl ? 'c-p' : 'n';
         case 91: return 'super'; // Left Windows Key - Windows
         case 92: return 'super'; // Right Windows Key - Windows
+        case 112: return 'help';
         case 125: return 'super'; // Left Super Key - Linux
         case 126: return 'super'; // Right Super Key - Linux
         case 224: return 'super'; // Command Key - MacOS
@@ -96,9 +97,10 @@ window.onload = function () {
     }
   }
 
-  class Help {
+  class CommandsHelp {
     constructor(options) {
-      this._el = $.el('#help');
+      this._el = $.el('#commands-help');
+      this._messageEl = $.el('#commands-help-message');
       this._commands = options.commands;
       this._newTab = options.newTab;
       this._toggled = false;
@@ -109,7 +111,8 @@ window.onload = function () {
 
     toggle(show) {
       this._toggled = (typeof show !== 'undefined') ? show : !this._toggled;
-      this._toggled ? $.bodyClassAdd('help') : $.bodyClassRemove('help');
+      this._toggled ? $.bodyClassAdd('commands-help') : $.bodyClassRemove('commands-help');
+      this._toggled ? this._messageEl.classList.add('highlight') : this._messageEl.classList.remove('highlight')
     }
 
     _bindMethods() {
@@ -161,10 +164,88 @@ window.onload = function () {
       document.addEventListener('keydown', this._handleKeydown);
     }
   }
+  class Help {
+    constructor(options) {
+      this._el = $.el('#help');
+      this._messageEl = $.el('#help-message');
+      this._searchDelimiter = options.searchDelimiter;
+      this._pathDelimiter = options.pathDelimiter;
+      this._toggled = false;
+      this._buildHelp(this._searchDelimiter, this._pathDelimiter);
+      this._bindMethods();
+      this._registerEvents();
+    }
+
+    toggle(show) {
+      this._toggled = (typeof show !== 'undefined') ? show : !this._toggled;
+      this._toggled ? $.bodyClassAdd('help') : $.bodyClassRemove('help');
+      this._toggled ? this._messageEl.classList.add('highlight') : this._messageEl.classList.remove('highlight')
+    }
+
+    _bindMethods() {
+      this._handleKeydown = this._handleKeydown.bind(this);
+    }
+
+    _buildHelp(searchDelimiter, pathDelimiter) {
+      const content = document.createElement('div');
+      content.classList.add('help-content-box');
+      content.insertAdjacentHTML(
+        'beforeend',
+        `
+        <h2 class="help-title">
+          <a href="https://github.com/VKhitrin/hub">hub</a>
+        </h2>
+        <p class="help-content">
+          A minimalistic start page suited for your workflow.
+        <p>
+        <h2 class="help-title">
+          <a href="https://github.com/VKhitrin/hub#usage">usage</a>
+        </h2>
+        <p class="help-content">
+          Type something when not in the hub or commands help menus to start searching.
+          <br><br>
+          Typing a URL will redirect you to that URL.
+          <br><br>
+          Use commands to interact with your configured webpages:
+          <ul>
+          <li>
+            'command_hotkey' - will browse to the website bound to the command
+          </li>
+          <li>
+            'command_hotkey' followed up by '${searchDelimiter}' - will perform a search
+          </li>
+          <li>
+            'command_hotkey' followed up by '${pathDelimiter}' - will navigate the page
+          </li>
+          </ul>
+        </p>
+        <span class="hub-version">
+          <a href="https://github.com/VKhitrin/hub/releases/tag/0.0.3">version 0.0.3</a>
+        </span>
+        `
+        );
+      this._el.appendChild(content);
+    }
+
+    _handleKeydown(e) {
+      if ($.key(e) === 'escape') this.toggle(false);
+      if ($.key(e) === 'help') {
+        this.toggle();
+      } else {
+        this.toggle(false);
+      }
+      
+    }
+
+    _registerEvents() {
+      document.addEventListener('keydown', this._handleKeydown);
+    }
+  }
 
     class Hub {
     constructor(options) {
       this._el = $.el('#hub');
+      this._messageEl = $.el('#hub-message');
       this._toggled = false;
       this._buildHub();
       this._bindMethods();
@@ -174,6 +255,7 @@ window.onload = function () {
     toggle(show) {
       this._toggled = (typeof show !== 'undefined') ? show : !this._toggled;
       this._toggled ? $.bodyClassAdd('hub') : $.bodyClassRemove('hub');
+      this._toggled ? this._messageEl.classList.add('highlight') : this._messageEl.classList.remove('highlight')
     }
 
     _bindMethods() {
@@ -262,6 +344,7 @@ window.onload = function () {
     constructor() {
       super(...arguments);
       this._storeName = 'history';
+      this._allowlocalStore = CONFIG.saveTolocalStorage;
     }
 
     addItem(query) {
@@ -305,7 +388,7 @@ window.onload = function () {
 
     _setHistory(history) {
       this._history = history;
-      this._save(history);
+      if(this._allowLocalStore) this._save(history);
     }
 
     _sort(history) {
@@ -564,9 +647,14 @@ window.onload = function () {
       this._formEl = $.el('#search-form');
       this._inputEl = $.el('#search-input');
       this._contextEl = $.el('#search-context');
+      this._helpMessagesEl = [
+        $.el('#commands-help-message'),
+        $.el('#hub-message')
+      ],
       this._colors = options.colors;
       this._commands = options.commands;
       this._help = options.help;
+      this._commandsHelp = options.commandsHelp;
       this._hub = options.hub;
       this._suggester = options.suggester;
       this._queryParser = options.queryParser;
@@ -582,11 +670,17 @@ window.onload = function () {
       $.bodyClassRemove('form')
       this._inputEl.value = '';
       this._inputElVal = '';
+      this._helpMessagesEl.forEach( message => {
+        message.style.visibility = "visible";
+      });
     }
 
     show() {
       $.bodyClassAdd('form');
       this._inputEl.focus();
+      this._helpMessagesEl.forEach( message => {
+        message.style.visibility = "hidden";
+      });
     }
 
     _bindMethods() {
@@ -612,6 +706,7 @@ window.onload = function () {
         case 'ctrl':
         case 'enter':
         case 'shift':
+        case 'help': return;
         case 'super': return;
         case 'escape': this.hide(); return;
       }
@@ -620,21 +715,23 @@ window.onload = function () {
 
     _handleInput() {
       const newQuery = this._inputEl.value;
-      const isHelp = newQuery === '?';
+      const isCommandsHelp = newQuery === '?';
       const isHub = newQuery === '~';
       const { isKey } = this._queryParser.parse(newQuery);
       this._inputElVal = newQuery;
       this._setBackgroundFromQuery(newQuery);
       this._setContextFromQuery(newQuery);
       this._set
-      if (!newQuery || isHelp ) this.hide();
-      if (isHelp){
+      if (!newQuery || isCommandsHelp ) this.hide();
+      if (isCommandsHelp){
+        this._help.toggle(false);
         this._hub.toggle(false);
-        this._help.toggle();
+        this._commandsHelp.toggle();
       };
       if (!newQuery || isHub ) this.hide();
       if (isHub){
         this._help.toggle(false);
+        this._commandsHelp.toggle(false);
         this._hub.toggle();
       };
       if (this._instantRedirect && isKey) this._submitWithValue(newQuery);
@@ -693,10 +790,17 @@ window.onload = function () {
     }
   }
 
-  const getHelp = () => {
-    return new Help({
+  const getCommandsHelp = () => {
+    return new CommandsHelp({
       commands: CONFIG.commands,
       newTab: CONFIG.newTab,
+    });
+  };
+
+  const getHelp = () => {
+    return new Help({
+      pathDelimiter: CONFIG.pathDelimiter,
+      searchDelimiter: CONFIG.searchDelimiter,
     });
   };
 
@@ -739,6 +843,7 @@ window.onload = function () {
       colors: CONFIG.colors,
       commands: CONFIG.commands,
       help: getHelp(),
+      commandsHelp: getCommandsHelp(),
       hub: getHub(),
       instantRedirect: CONFIG.instantRedirect,
       newTab: CONFIG.newTab,
