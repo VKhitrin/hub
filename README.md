@@ -4,7 +4,7 @@ hub is a modified fork of [tilde](https://github.com/cadejscroggins/tilde) made 
 
 A minimalistic start page suited for your workflow.
 
-![hub](https://i.imgur.com/Ad8ygbJ.gif)
+![hub](https://i.imgur.com/U0ZVKrB.gif)
 
 ## Usage
 

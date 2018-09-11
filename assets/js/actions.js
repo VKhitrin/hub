@@ -220,7 +220,7 @@ window.onload = function () {
           </ul>
         </p>
         <span class="hub-version">
-          <a href="https://github.com/VKhitrin/hub/releases/tag/0.0.3">version 0.0.3</a>
+          <a href="https://github.com/VKhitrin/hub/releases/tag/0.0.3a">version 0.0.3a</a>
         </span>
         `
         );

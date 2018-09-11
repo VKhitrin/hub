@@ -110,6 +110,7 @@ a:focus {
   min-height: 3em;
   flex-wrap: wrap;
   justify-content: center;
+  list-style: none;
 }
 
 body.suggestions #search-suggestions {
