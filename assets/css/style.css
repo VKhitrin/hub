@@ -6,9 +6,9 @@
 }
 
 :root{
-  --background: #000;
-  --foreground: #fff;
-  --search: #222;
+  --background:#000;
+  --foreground:#fff;
+  --search:#222;
 }
 
 body {
@@ -25,9 +25,9 @@ body {
 }
 
 input,
-button,
+.js-search-suggestion,
 input:focus,
-button:focus {
+.js-search-suggestion:focus {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -69,7 +69,6 @@ a:focus {
   display: block;
   font-size: 1.5rem;
   letter-spacing: .05em;
-  cursor: pointer;
   color: var(--foreground);
 }
 
@@ -149,7 +148,7 @@ body.suggestions #search-suggestions {
   opacity: 0;
 }
 
-#help, #commands-help, #hub{
+#help, #help-history, #help-config, #help-theme, #commands-help, #hub{
   display: flex;
   padding: 8vw;
   background: var(--background);
@@ -160,7 +159,7 @@ body.suggestions #search-suggestions {
 z-index: 1;
 }
 
-#help {
+#help, #help-history, #help-config, #help-theme {
   z-index: 2;
 }
 
@@ -239,12 +238,16 @@ z-index: 1;
   width: 100%;
   height: 100%;
   visibility: hidden;
+  color: var(--foreground)
 }
 
 body.help #help.overlay,
 body.commands-help #commands-help.overlay,
 body.hub #hub.overlay,
-body.form #search-form.overlay {
+body.form #search-form.overlay,
+body.history-help-menu #help-history.overlay,
+body.config-help-menu #help-config.overlay,
+body.theme-help-menu #help-theme.overlay {
   visibility: visible;
 }
 
@@ -299,6 +302,26 @@ span.highlight p span {
   color: var(--foreground); 
 }
 
+.help-grid-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 33%)100%;
+}
+
+.help-button, #close-history-help-button {
+  background: none;
+  height: 2.5rem;
+  font-size: 1rem;
+  color: var(--foreground);
+  border: none;
+  width: 100%;
+  cursor: pointer;
+}
+
+.help-button:hover, #close-history-help-button:hover {
+  background-color: var(--foreground);
+  color: var(--background);
+}
+
 .hub-version a {
   text-decoration: none;
   font-size: 0.7em;
@@ -307,6 +330,43 @@ span.highlight p span {
 .help-title a:hover, .hub-version a:hover {
   background-color: var(--foreground);
   color: var(--background);;
+}
+
+#help-menu-table {
+  width: 50vw;
+  text-align: center;
+  border-spacing: 0;
+  word-wrap: break-word;
+  word-break: break-all;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+#help-menu-table tbody,
+#help-menu-table thead { display: block; }
+
+#help-menu-table thead {
+  border: 1px solid var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+}
+
+#help-menu-table thead tr th, #help-menu-table td { 
+  width: 25vw;
+  padding: 15px;
+}
+
+#help-menu-table tbody {
+  max-height: 20vw;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid var(--foreground);
+  border-top: none;
+}
+
+.theme-preview-header, .theme-preview-cell {
+  width: 5vw!important;
 }
 
 @media (min-width: 500px) {

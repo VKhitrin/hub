@@ -219,8 +219,14 @@ window.onload = function () {
           </li>
           </ul>
         </p>
+        <span class="help-grid-buttons">
+          <button class="help-button" id="help-history-button">View History</button>
+          <button class="help-button" id="help-config-button">View Config</button>
+          <button class="help-button" id="help-theme-button">View Theme</button>
+        </span>
+        <br>
         <span class="hub-version">
-          <a href="https://github.com/VKhitrin/hub/releases/tag/0.0.3a">version 0.0.3a</a>
+          <a href="https://github.com/VKhitrin/hub/releases/tag/0.0.4">version 0.0.4</a>
         </span>
         `
         );
@@ -234,11 +240,319 @@ window.onload = function () {
       } else {
         this.toggle(false);
       }
-      
     }
 
     _registerEvents() {
       document.addEventListener('keydown', this._handleKeydown);
+    }
+  }
+
+  class HistoryHelpMenu {
+    constructor(options) {
+      this._el = $.el('#help-history');
+      this._buttonEl = $.el('#help-history-button');
+      this._toggled = false;
+      this._storeName = 'history';
+      this._bindMethods();
+      this._registerEvents();
+    }
+
+    _fetch() {
+      return JSON.parse(localStorage.getItem(this._storeName)) || [];
+    }
+
+    _getHistory() {
+      this._history = this._history || this._fetch();
+      return this._history;
+    }
+
+    toggle(show) {
+      this._toggled = (typeof show !== 'undefined') ? show : !this._toggled;
+      if (this._toggled){
+        $.bodyClassAdd('history-help-menu');
+        this._buildHistoryHelp();
+      } else {
+        $.bodyClassRemove('history-help-menu');
+        this._destroyHistoryHelp();
+      }
+    }
+
+    _bindMethods() {
+      this._handleKeydown = this._handleKeydown.bind(this);
+      this._onClick = this._onClick.bind(this);
+    }
+
+    _wipeHistory() {
+      localStorage.clear(this._storeName);
+      location.reload();
+    }
+
+    _generateHistoryEntries(history) {
+      history.forEach(entry => {
+        document.getElementById('help-menu-table').childNodes[3].innerHTML += entry;
+      })
+    }
+
+    _buildHistoryHelp() {
+      const content = document.createElement('div');
+      content.classList.add('help-menu');
+      const hubHistory = this._getHistory().map(([item, count]) => {
+        return `<tr><td class="history-query-cell">${item}</td><td class="history-count-cell">${count}</td></tr>`
+      });
+      if (hubHistory.length == 0) {
+        var historyContent = "";
+      } else {
+        var historyContent = `
+        <table id="help-menu-table">
+          <thead>
+            <tr>
+              <th class="history-query-header">Query</th>
+              <th class="history-count-header">Count</th>
+            </tr>
+          </thead>
+        <tbody>
+        </tbody>
+        </table>
+        <br>
+        <button id="close-history-help-button">Wipe History</button>
+        `
+      }
+      content.insertAdjacentHTML(
+        'beforeend',
+        `
+        <h2 class="help-title">
+          History
+        </h2>
+        <p class="help-content">
+          View and manage hub's history
+        </p>
+        ${historyContent}
+        `
+        );
+      this._el.appendChild(content);
+      if (this._closeButtonEl = $.el('#close-history-help-button')) this._closeButtonEl.addEventListener('click', this._wipeHistory);
+      if (hubHistory.length) this._generateHistoryEntries(hubHistory);
+    }
+
+    _destroyHistoryHelp() {
+      this._el.innerHTML = null;
+    }
+
+    _handleKeydown(e) {
+      this.toggle(false);
+    }
+
+    _onClick(e) {
+      this.toggle(true);
+    }
+
+    _registerEvents() {
+      document.addEventListener('keydown', this._handleKeydown);
+      this._buttonEl.addEventListener('click', this._onClick);
+    }
+  }
+
+  class ConfigHelpMenu {
+    constructor(options) {
+      this._el = $.el('#help-config');
+      this._buttonEl = $.el('#help-config-button');
+      this._toggled = false;
+      this._bindMethods();
+      this._registerEvents();
+    }
+
+    toggle(show) {
+      this._toggled = (typeof show !== 'undefined') ? show : !this._toggled;
+      if (this._toggled){
+        $.bodyClassAdd('config-help-menu');
+        this._buildConfigHelp();
+      } else {
+        $.bodyClassRemove('config-help-menu');
+        this._destroyConfigHelp();
+      }
+    }
+
+    _bindMethods() {
+      this._handleKeydown = this._handleKeydown.bind(this);
+      this._onClick = this._onClick.bind(this);
+    }
+
+    _generateConfigEntries(config) {
+      document.getElementById('help-menu-table').childNodes[3].innerHTML += config;
+    }
+
+    _buildConfigHelp() {
+      var configContent = [];
+      const regex = /^\d+$/;
+      const content = document.createElement('div');
+      content.classList.add('help-menu');
+      for (var entry in CONFIG) {
+        if (CONFIG[entry].length && (typeof CONFIG[entry] !== "string")) {
+          const rows = (CONFIG[entry].length)+1;
+          configContent += `<tr><td rowspan="${rows}" class="config-key-cell">${entry}</td></tr>`;
+          for (var subEntry in CONFIG[entry]) {
+            configContent += `<tr><td class="config-value-cell">`;
+            for (var innerEntry in CONFIG[entry][subEntry]) {
+              if (regex.test(innerEntry)) { configContent += (innerEntry != CONFIG[entry][subEntry].length-1) ? `${CONFIG[entry][subEntry][innerEntry]}, ` : `${CONFIG[entry][subEntry][innerEntry]}` 
+            } else {
+              configContent += (innerEntry != CONFIG[entry][subEntry].length-1) ? `${innerEntry}: ${CONFIG[entry][subEntry][innerEntry]}, ` : `${innerEntry}: ${CONFIG[entry][subEntry][innerEntry]}`
+            }
+          }
+            configContent += `</td>`;
+          }
+          configContent += `</tr>`;
+      } else {
+        var trigger = false;
+        if (typeof CONFIG[entry] !== "object") {
+          configContent += `<tr><td class="config-key-cell">${entry}</td><td class="config-value-cell">${CONFIG[entry]}</td></tr>`;
+        } else {
+          for (var subEntry in CONFIG[entry])
+          {
+            const rows = (CONFIG[entry][subEntry].length);
+            if (trigger == false) { 
+              configContent += `<tr><td rowspan="${rows}" class="config-key-cell">${entry}</td>`;
+              trigger = true;
+            }
+            configContent += `<tr><td class="config-value-cell">${subEntry}: `
+            for (var innerEntry in CONFIG[entry][subEntry]) {
+              configContent += (innerEntry != CONFIG[entry][subEntry].length-1) ? `${CONFIG[entry][subEntry][innerEntry]}, ` : `${CONFIG[entry][subEntry][innerEntry]}`
+            }
+          }
+          configContent += `</tr>`;
+        }
+      }
+    }
+      content.insertAdjacentHTML(
+        'beforeend',
+        `
+        <h2 class="help-title">
+          Config
+        </h2>
+        <p class="help-content">
+          View hub's config
+        </p>
+        <table id="help-menu-table">
+        <thead>
+          <tr>
+            <th class="config-key-header">Key</th>
+            <th class="config-key-value">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <br>
+      `
+        );
+      this._el.appendChild(content);
+      this._generateConfigEntries(configContent);
+    }
+
+    _destroyConfigHelp() {
+      this._el.innerHTML = null;
+    }
+
+    _handleKeydown(e) {
+      this.toggle(false);
+    }
+
+    _onClick(e) {
+      this.toggle(true);
+    }
+
+    _registerEvents() {
+      document.addEventListener('keydown', this._handleKeydown);
+      this._buttonEl.addEventListener('click', this._onClick);
+    }
+  }
+
+  class ThemeHelpMenu {
+    constructor(options) {
+      this._el = $.el('#help-theme');
+      this._buttonEl = $.el('#help-theme-button');
+      this._toggled = false;
+      this._style = getComputedStyle(document.body);
+      this._cssVars = ['--background', '--foreground', '--search'];
+      this._bindMethods();
+      this._registerEvents();
+    }
+
+    toggle(show) {
+      this._toggled = (typeof show !== 'undefined') ? show : !this._toggled;
+      if (this._toggled){
+        $.bodyClassAdd('theme-help-menu');
+        this._buildThemeHelp();
+      } else {
+        $.bodyClassRemove('theme-help-menu');
+        this._destroyThemeHelp();
+      }
+    }
+
+    _bindMethods() {
+      this._handleKeydown = this._handleKeydown.bind(this);
+      this._onClick = this._onClick.bind(this);
+    }
+
+    _generateThemeEntries(theme) {
+      for (var entry in theme) {
+        document.getElementById('help-menu-table').childNodes[3].innerHTML += theme[entry];
+        var color = document.getElementById(`table-theme-color-cell-${entry}`).innerHTML;
+        document.getElementById(`table-theme-color-cell-preview-${entry}`).style.backgroundColor = color;
+      }
+    }
+
+    _buildThemeHelp() {
+      const content = document.createElement('div');
+      var themeValues = [];
+      for (var obj in this._cssVars){
+        themeValues.push(`<tr><td class="theme-variable-cell">${this._cssVars[obj]}</td><td class="theme-value-cell" id="table-theme-color-cell-${obj}">${this._style.getPropertyValue(this._cssVars[obj])}</td><td class="theme-preview-cell" id="table-theme-color-cell-preview-${obj}"></td></tr>`);
+      }
+      content.classList.add('theme-menu');
+        var themeContent = `
+        <table id="help-menu-table">
+          <thead>
+            <tr>
+              <th class="theme-variable-header">Variable</th>
+              <th class="theme-value-header">Value</th>
+              <th class="theme-preview-header">Preview</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+        <br>
+        `
+      content.insertAdjacentHTML(
+        'beforeend',
+        `
+        <h2 class="help-title">
+          Theme
+        </h2>
+        <p class="help-content">
+          View hub's theme
+        </p>
+        ${themeContent}
+        `
+        );
+      this._el.appendChild(content);
+      this._generateThemeEntries(themeValues);
+    }
+
+    _destroyThemeHelp() {
+      this._el.innerHTML = null;
+    }
+
+    _handleKeydown(e) {
+      this.toggle(false);
+    }
+
+    _onClick(e) {
+      this.toggle(true);
+    }
+
+    _registerEvents() {
+      document.addEventListener('keydown', this._handleKeydown);
+      this._buttonEl.addEventListener('click', this._onClick);
     }
   }
 
@@ -343,8 +657,8 @@ window.onload = function () {
   class HistoryInfluencer extends Influencer {
     constructor() {
       super(...arguments);
+      this._allowLocalStore = CONFIG.saveToLocalStorage;
       this._storeName = 'history';
-      this._allowlocalStore = CONFIG.saveTolocalStorage;
     }
 
     addItem(query) {
@@ -858,4 +1172,11 @@ window.onload = function () {
   });
 
   new CurrentDate();
+
+  new HistoryHelpMenu();
+
+  new ConfigHelpMenu();
+
+  new ThemeHelpMenu();
+  
 }
