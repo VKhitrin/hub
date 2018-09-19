@@ -4,9 +4,13 @@ hub is a modified fork of [tilde](https://github.com/cadejscroggins/tilde) made 
 
 A minimalistic start page suited for your workflow.
 
-![hub](https://i.imgur.com/U0ZVKrB.gif)
+![hub](https://i.imgur.com/WMtcH8F.gif)
+
+[Roadmap](https://github.com/VKhitrin/hub/wiki/Roadmap)
 
 ## Usage
+
+For more detailed usage, refer to the [wiki](https://github.com/VKhitrin/hub/wiki/Detailed-Usage). 
 
 ### General
 
