@@ -5,12 +5,6 @@
   src: local('Lato Regular'), local('Lato-Regular'), url(../fonts/LatoLatin-Regular.woff2) format('woff2');
 }
 
-:root{
-  --background:#000;
-  --foreground:#fff;
-  --search:#222;
-}
-
 body {
   position: absolute;
   top: 0;

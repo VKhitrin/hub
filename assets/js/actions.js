@@ -43,6 +43,34 @@ window.onload = function () {
     },
   };
 
+  class Theme {
+    constructor(options) {
+      this.components = [
+        {color: options.bgColor, variable: '--background', default: '#000'},
+        {color: options.fgColor, variable: '--foreground', default: '#fff'},
+        {color: options.searchColor, variable: '--search', default: '#222'}
+      ]
+      this.testEl = document.createElement('div');
+      this._validateTheme();
+    }
+    
+    _validateTheme() {
+      this.components.forEach (component => {
+        this.testEl.style.backgroundColor = component['color'];
+        this.testEl.style.backgroundColor ? this._assignColor(component['color'], component['variable']) : this._triggerDefault(component['color'], component['default'], component['variable']);
+      })
+    }
+
+    _triggerDefault(wrongValue, value, cssVariable) {
+      console.log(`The entered value for ${cssVariable}: '${wrongValue}' is incorrect, defaulting to ${value}`)
+      this._assignColor(value,cssVariable);
+    }
+    
+    _assignColor(value, cssVariable) {
+      document.documentElement.style.setProperty(cssVariable, value);
+    }
+  }
+
   class Clock {
     constructor(options) {
       this._el = $.el('#clock');
@@ -226,7 +254,7 @@ window.onload = function () {
         </span>
         <br>
         <span class="hub-version">
-          <a href="https://github.com/VKhitrin/hub/releases/tag/0.0.4">version 0.0.4</a>
+          <a href="https://github.com/VKhitrin/hub/releases/tag/0.0.5">version 0.0.5</a>
         </span>
         `
         );
@@ -514,7 +542,7 @@ window.onload = function () {
             <tr>
               <th class="theme-variable-header">Variable</th>
               <th class="theme-value-header">Value</th>
-              <th class="theme-preview-header">Preview</th>
+              <th class="theme-preview-header"></th>
             </tr>
           </thead>
           <tbody>
@@ -1169,6 +1197,12 @@ window.onload = function () {
   new Clock({
     delimiter: CONFIG.clockDelimiter,
     form: getForm(),
+  });
+
+  new Theme({
+    bgColor: CONFIG.backgroundColor,
+    fgColor: CONFIG.foregroundColor,
+    searchColor: CONFIG.searchColor,
   });
 
   new CurrentDate();

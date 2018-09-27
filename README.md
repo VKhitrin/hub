@@ -135,6 +135,21 @@ Configuration variables with their default values:
     clockDelimiter: '&nbsp;',
     ```
 
+* CONFIG.backgroundColor - Background color of main screen - mapped to --background CSS variable, if not defined or invalid defaults to value assigned in 'actions.js'
+    ```javascript
+    backgroundColor: '#000',
+    ```
+
+* CONFIG.foregroundColor - Background color of main screen - mapped to --foreground CSS variable, if not defined or invalid defaults to value assigned in 'actions.js'
+    ```javascript
+    foregroundColor: '#fff',
+    ```
+
+* CONFIG.searchColor - Background color of main screen - mapped to --search CSS variable, if not defined or invalid defaults to value assigned in 'actions.js'
+    ```javascript
+    searchColor: '#222',
+    ```
+
 ## File Hierarchy
 
 * `index.html` - Contains all the static HTML.

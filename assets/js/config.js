@@ -62,6 +62,15 @@ const CONFIG = {
   // the delimiter between the hours and minutes in the clock
   clockDelimiter: '&nbsp;',
 
+  // background color of main screen - mapped to --background CSS variable, if not defined or invalid defaults to value assigned in 'actions.js'
+  backgroundColor: '#000',
+
+  // foreground color of main screen - mapped to --foreground CSS variable, if not defined or invalid defaults to value assigned in 'actions.js'
+  foregroundColor: '#fff',
+
+  // default search background color - mapped to --search CSS variable, if not defined or invalid defaults to value assigned in 'actions.js'
+  searchColor: '#222',
+
   // note: you can pass in your search query via the q query param
   // e.g. going to file:///path/to/hub/index.html?q=cats is equivalent
   // to typing "cats" and pressing enter
