@@ -57,6 +57,12 @@ a:focus {
   letter-spacing: .05em;
   cursor: pointer;
   color: var(--foreground);
+  text-align: center;
+}
+
+#am-pm {
+  font-size: 2rem;
+  margin-left: 0.3rem;
 }
 
 #date {

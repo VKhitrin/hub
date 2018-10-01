@@ -71,6 +71,9 @@ const CONFIG = {
   // default search background color - mapped to --search CSS variable, if not defined or invalid defaults to value assigned in 'actions.js'
   searchColor: '#222',
 
+  // set clock to 12 hour format
+  twelveHour: false,
+
   // note: you can pass in your search query via the q query param
   // e.g. going to file:///path/to/hub/index.html?q=cats is equivalent
   // to typing "cats" and pressing enter

@@ -50,8 +50,10 @@ window.onload = function () {
         {color: options.fgColor, variable: '--foreground', default: '#fff'},
         {color: options.searchColor, variable: '--search', default: '#222'}
       ]
+      this._style = getComputedStyle(document.body);
       this.testEl = document.createElement('div');
       this._validateTheme();
+      this._metaTheme();
     }
     
     _validateTheme() {
@@ -69,6 +71,14 @@ window.onload = function () {
     _assignColor(value, cssVariable) {
       document.documentElement.style.setProperty(cssVariable, value);
     }
+
+    _metaTheme() {
+      const themeColor = this._style.getPropertyValue('--background');
+      var meta = document.createElement('meta');
+      meta.httpEquiv = "theme-color";
+      meta.content = themeColor;
+      document.getElementsByTagName('head')[0].appendChild(meta);
+    }
   }
 
   class Clock {
@@ -76,6 +86,7 @@ window.onload = function () {
       this._el = $.el('#clock');
       this._delimiter = options.delimiter;
       this._form = options.form;
+      this._twelveHour = options.twelveHour;
       this._setTime = this._setTime.bind(this);
       this._registerEvents();
       this._start();
@@ -91,9 +102,15 @@ window.onload = function () {
 
     _setTime() {
       const date = new Date();
-      const hours = this._pad(date.getHours());
+      let hours = this._pad(date.getHours());
+      let amPm = '';
+      if (this._twelveHour) {
+        hours = (date.getHours() > 12) ? date.getHours() - 12 : (date.getHours() === 0) ? 12 : date.getHours();
+        amPm = (date.getHours() > 12) ? 'PM' : 'AM';
+      }
       const minutes = this._pad(date.getMinutes());
-      this._el.innerHTML = hours + this._delimiter + minutes;
+      this._el.innerHTML = hours + this._delimiter + minutes + '<span id="am-pm">' + amPm + '</span>';
+      this._el.setAttribute('datetime', date.toTimeString());
     }
 
     _start() {
@@ -254,7 +271,7 @@ window.onload = function () {
         </span>
         <br>
         <span class="hub-version">
-          <a href="https://github.com/VKhitrin/hub/releases/tag/0.0.5">version 0.0.5</a>
+          <a href="https://github.com/VKhitrin/hub/releases/tag/0.0.6">version 0.0.6</a>
         </span>
         `
         );
@@ -1196,6 +1213,7 @@ window.onload = function () {
 
   new Clock({
     delimiter: CONFIG.clockDelimiter,
+    twelveHour: CONFIG.twelveHour,
     form: getForm(),
   });
 

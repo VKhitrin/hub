@@ -150,6 +150,11 @@ Configuration variables with their default values:
     searchColor: '#222',
     ```
 
+* CONFIG.twelveHours - Set clock to 12 hour format
+    ```javascript
+    twelveHour: false,
+    ```
+    
 ## File Hierarchy
 
 * `index.html` - Contains all the static HTML.
