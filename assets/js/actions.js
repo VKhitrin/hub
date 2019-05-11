@@ -55,7 +55,7 @@ window.onload = function () {
       this._validateTheme();
       this._metaTheme();
     }
-    
+
     _validateTheme() {
       this.components.forEach (component => {
         this.testEl.style.backgroundColor = component['color'];
@@ -67,7 +67,7 @@ window.onload = function () {
       console.log(`The entered value for ${cssVariable}: '${wrongValue}' is incorrect, defaulting to ${value}`)
       this._assignColor(value,cssVariable);
     }
-    
+
     _assignColor(value, cssVariable) {
       document.documentElement.style.setProperty(cssVariable, value);
     }
@@ -78,6 +78,27 @@ window.onload = function () {
       meta.httpEquiv = "theme-color";
       meta.content = themeColor;
       document.getElementsByTagName('head')[0].appendChild(meta);
+    }
+  }
+
+  class defaultSearchEngine {
+    constructor(options) {
+      this._searchEngine = options.searchEngine;
+      this._supportedEngines = {
+        'None': '',
+        'Google': [null, 'Google', '*', 'https://encrypted.google.com', '/search?q={}', '#111'],
+        'DuckDuckGo': [null, 'DuckDuckGo', '*', 'https://duckduckgo.com', '/?q={}', '#111'],
+      };
+      this._setDefaultSearchEngine();
+    }
+
+    _setDefaultSearchEngine() {
+      if (this._searchEngine in this._supportedEngines) {
+        CONFIG.commands.push(this._supportedEngines[this._searchEngine])
+      } else {
+        console.log("Search engine not supported, defaulting to Google");
+        CONFIG.commands.push(this._supportedEngines['Google'])
+      }
     }
   }
 
@@ -238,13 +259,13 @@ window.onload = function () {
         'beforeend',
         `
         <h2 class="help-title">
-          <a href="https://github.com/VKhitrin/hub">hub</a>
+          <a href="https://github.com/vkhitrin/hub">hub</a>
         </h2>
         <p class="help-content">
           A minimalistic start page suited for your workflow.
         <p>
         <h2 class="help-title">
-          <a href="https://github.com/VKhitrin/hub#usage">usage</a>
+          <a href="https://github.com/vkhitrin/hub#usage">usage</a>
         </h2>
         <p class="help-content">
           Type something when not in the hub or commands help menus to start searching.
@@ -271,7 +292,7 @@ window.onload = function () {
         </span>
         <br>
         <span class="hub-version">
-          <a href="https://github.com/VKhitrin/hub/releases/tag/0.0.6">version 0.0.6</a>
+          <a href="https://github.com/vkhitrin/hub/releases/tag/0.0.7">version 0.0.7</a>
         </span>
         `
         );
@@ -438,7 +459,7 @@ window.onload = function () {
           for (var subEntry in CONFIG[entry]) {
             configContent += `<tr><td class="config-value-cell">`;
             for (var innerEntry in CONFIG[entry][subEntry]) {
-              if (regex.test(innerEntry)) { configContent += (innerEntry != CONFIG[entry][subEntry].length-1) ? `${CONFIG[entry][subEntry][innerEntry]}, ` : `${CONFIG[entry][subEntry][innerEntry]}` 
+              if (regex.test(innerEntry)) { configContent += (innerEntry != CONFIG[entry][subEntry].length-1) ? `${CONFIG[entry][subEntry][innerEntry]}, ` : `${CONFIG[entry][subEntry][innerEntry]}`
             } else {
               configContent += (innerEntry != CONFIG[entry][subEntry].length-1) ? `${innerEntry}: ${CONFIG[entry][subEntry][innerEntry]}, ` : `${innerEntry}: ${CONFIG[entry][subEntry][innerEntry]}`
             }
@@ -454,7 +475,7 @@ window.onload = function () {
           for (var subEntry in CONFIG[entry])
           {
             const rows = (CONFIG[entry][subEntry].length);
-            if (trigger == false) { 
+            if (trigger == false) {
               configContent += `<tr><td rowspan="${rows}" class="config-key-cell">${entry}</td>`;
               trigger = true;
             }
@@ -1196,7 +1217,7 @@ window.onload = function () {
       searchDelimiter: CONFIG.searchDelimiter,
     });
   };
-  
+
   const getForm = () => {
     return new Form({
       colors: CONFIG.colors,
@@ -1230,5 +1251,9 @@ window.onload = function () {
   new ConfigHelpMenu();
 
   new ThemeHelpMenu();
-  
+
+  new defaultSearchEngine({
+    searchEngine: CONFIG.searchEngine,
+  });
+
 }

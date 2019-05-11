@@ -6,17 +6,17 @@ A minimalistic start page suited for your workflow.
 
 ![hub](https://i.imgur.com/WMtcH8F.gif)
 
-[Roadmap](https://github.com/VKhitrin/hub/wiki/Roadmap)
+[Roadmap](https://github.com/vkhitrin/hub/wiki/Roadmap)
 
 ## Usage
 
-For more detailed usage, refer to the [wiki](https://github.com/VKhitrin/hub/wiki/Detailed-Usage). 
+For more detailed usage, refer to the [wiki](https://github.com/vkhitrin/hub/wiki/Detailed-Usage).
 
 ### General
 
 Generic google queries can be performed by typing.
 
-Typing `I don't know what I'm doing` will trigger a google query with the entered text.
+Typing `I don't know what I'm doing` will trigger a query with the entered text on your defined search engine.
 
 To access a site qucikly, press the assigned hotkey.
 
@@ -59,10 +59,9 @@ Will showcase relevant dynamic information.
 Currently the only way to override configuration is through the `assets/js/config.js` (default config file) and `assets/js/internal.js` files.
 
 Configuration variables with their default values:
-- CONFIG.commands -  The category, name, key, url, search path and color for your commands, if none of the specified keys are matched, the '*' key is used
+- CONFIG.commands -  The category, name, key, url, search path and color for your commands
     ```javascript
     commands: [
-        [null, 'Google', '*', 'https://encrypted.google.com', '/search?q={}', '#111'],
         ['Work', 'GitHub', 'g', 'https://github.com', '/search?q={}', '#333'],
         ['Work', 'Stackoverflow', 's', 'https://stackoverflow.com', '/search?q={}', '#f48024'],
         ['Look', 'Codrops', 'C', 'https://tympanus.net/codrops', '?search-type=posts&s={}', '#0099cc'],
@@ -75,7 +74,7 @@ Configuration variables with their default values:
         ['Watch', 'YouTube', 'y', 'https://youtube.com/', '/results?search_query={}', '#cd201f'],
     ],
     ```
-    
+
 * CONFIG.suggestions - Give suggestions as you type
     ```javascript
     suggestions: true,
@@ -84,12 +83,12 @@ Configuration variables with their default values:
     ```javascript
     saveToLocalStorage: true,
     ```
-    
+
 * CONFIG.suggestionsLimit - Max amount of suggestions that will ever be displayed
     ```javascript
     suggestionsLimit: 10,
     ```
-    
+
 * CONFIG.influencers - the order and limit for each suggestion influencer
     ``` javascript
     // the order and limit for each suggestion influencer
@@ -99,7 +98,7 @@ Configuration variables with their default values:
         { name: 'DuckDuckGo', limit: 5 }, // "DuckDuckGo" suggestions come from the duck duck go search api
     ],
     ```
-    
+
 * CONFIG.defaultSuggestions - Default search suggestions for the specified queries
     ``` javascript
     defaultSuggestions: {
@@ -111,17 +110,17 @@ Configuration variables with their default values:
     ```javascript
     instantRedirect: false,
     ```
-    
+
 * CONFIG.newTab - Open queries in a new tab
     ```javascript
     newTab: false,
     ```
-    
+
 * CONFIG.colors - Dynamic background colors when command domains are matched
     ```javascript
     colors: true,
     ```
-    
+
 * CONFIG.searchDelimiter - The delimiter between the key and your search query
     ```javascript
     searchDelimiter: ':',
@@ -154,7 +153,11 @@ Configuration variables with their default values:
     ```javascript
     twelveHour: false,
     ```
-    
+
+  // set defaut search engine, implemented options are ['None', Google', 'DuckDuckGo']
+  // if invalid value is given, default to Google
+* searchEngine: 'DuckDuckGo',
+
 ## File Hierarchy
 
 * `index.html` - Contains all the static HTML.
@@ -168,14 +171,6 @@ Configuration variables with their default values:
 * `assets/css/style.css` - CSS customization.
 
 * `assets/fonts/` - Local fonts directory.
-
-## Compatability
-
-(Need to test on more platforms)
-
-### MacOS
-
-Firefox 57+
 
 ## Credits
 

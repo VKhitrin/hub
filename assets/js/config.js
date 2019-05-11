@@ -3,7 +3,6 @@ const CONFIG = {
   // the category, name, key, url, search path and color for your commands
   // if none of the specified keys are matched, the '*' key is used
   commands: [
-    [null, 'Google', '*', 'https://encrypted.google.com', '/search?q={}', '#111'],
     ['Work', 'GitHub', 'g', 'https://github.com', '/search?q={}', '#333'],
     ['Work', 'Stackoverflow', 's', 'https://stackoverflow.com', '/search?q={}', '#f48024'],
     ['Look', 'Codrops', 'C', 'https://tympanus.net/codrops', '?search-type=posts&s={}', '#0099cc'],
@@ -73,6 +72,10 @@ const CONFIG = {
 
   // set clock to 12 hour format
   twelveHour: false,
+
+  // set defaut search engine, implemented options are ['None', Google', 'DuckDuckGo']
+  // if invalid value is given, default to Google
+  searchEngine: 'Google',
 
   // note: you can pass in your search query via the q query param
   // e.g. going to file:///path/to/hub/index.html?q=cats is equivalent
